@@ -1,0 +1,83 @@
+#b — черная фигура (black)
+#w — белая фигура (white)
+#q — ферзь (queen)
+#k — король (king)
+#p — пешка (pawn)
+#r — ладья (rook)
+#n — конь (knight)
+#bq — черная ферзь, wp — белая пешка и т.д.
+
+
+board = {
+    "a1": "wr", "b1": "wn", "c1": "wb", "d1": "wq", "e1": "wk", "f1": "wb", "g1": "wn", "h1": "wr",
+    "a2": "wp", "b2": "wp", "c2": "wp", "d2": "wp", "e2": "wp", "f2": "wp", "g2": "wp", "h2": "wp",
+    "a3": None, "b3": None, "c3": None, "d3": None, "e3": None, "f3": None, "g3": None, "h3": None,
+    "a4": None, "b4": None, "c4": None, "d4": None, "e4": None, "f4": None, "g4": None, "h4": None,
+    "a5": None, "b5": None, "c5": None, "d5": None, "e5": None, "f5": None, "g5": None, "h5": None,
+    "a6": None, "b6": None, "c6": None, "d6": None, "e6": None, "f6": None, "g6": None, "h6": None,
+    "a7": "bp", "b7": "bp", "c7": "bp", "d7": "bp", "e7": "bp", "f7": "bp", "g7": "bp", "h7": "bp"}
+
+for cell in board:
+    piece = board[cell]
+
+    if piece is not None:
+        color = piece[0]
+        ptype = piece[1]
+
+        if ptype == "p":
+            row = cell[0]
+            col = int(cell[1])
+
+            if color == "w":
+                next_cell = row + str(col + 1)
+            else:
+                next_cell = row + str(col - 1)
+
+            print(cell, "->", next_cell)
+
+
+
+
+def move(move_from, move_to):
+    # проверки
+    if move_from not in board or move_to not in board:
+        print("ошибка клетки")
+        return
+
+    if board[move_from] is None:
+        print("нет фигуры")
+        return
+
+    # сохранить позицию
+    history.append(dict(board))
+
+    # сделать ход
+    board[move_to] = board[move_from]
+    board[move_from] = None
+
+    print(f"ход: {move_from} -> {move_to}")
+
+    # проверка повтора
+    repeat = False
+    for h in history:
+        if h == board:
+            repeat = True
+            break
+
+    if repeat:
+        print("повтор позиции!")
+
+
+# игровой цикл
+game = True
+while game:
+    move_from = input("откуда: ")
+    move_to = input("куда: ")
+
+    move(move_from, move_to)
+
+    print("позиция:", board)
+
+    stop = input("ещё? да/нет: ")
+    if stop.lower() != "да":
+        game = False
